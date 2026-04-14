@@ -10,4 +10,5 @@ export default {
   ],
   coverageDirectory: "coverage",
   coveragePathIgnorePatterns: ["/node_modules/", "/tests/"],
+  coverageReporters: ["text", "lcov", "cobertura"],
 };

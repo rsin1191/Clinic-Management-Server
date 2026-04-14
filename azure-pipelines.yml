@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
@@ -14,6 +9,7 @@ stages:
   displayName: Build Stage
   jobs:
   - job: BuildJob
+    displayName: Build Job
     steps:
     - checkout: self
 
@@ -22,16 +18,17 @@ stages:
         version: '18.x'
       displayName: Install Node.js
 
-    - script: npm ci
+    - script: npm install
       displayName: Install Dependencies
 
-    - script: echo "Build step"
-      displayName: Build
+    - script: npm run build
+      displayName: Build Application
 
 - stage: Test
   displayName: Test Stage
   jobs:
   - job: TestJob
+    displayName: Test Job
     steps:
     - checkout: self
 
@@ -40,8 +37,14 @@ stages:
         version: '18.x'
       displayName: Install Node.js
 
-    - script: npm ci
+    - script: npm install
       displayName: Install Dependencies
 
     - script: npm test
       displayName: Run Tests with Coverage
+
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        summaryFileLocation: 'coverage/cobertura-coverage.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)'
+      displayName: Publish Code Coverage
