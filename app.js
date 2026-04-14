@@ -1,5 +1,6 @@
 import "dotenv/config";
 import helmet from "helmet";
+import cors from 'cors'
 import express from "express";
 import { signInValidation, signUpValidation } from "./middlewares/validate.js";
 import connectDB from "./config/db.js";
@@ -36,6 +37,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use(express.json())
 
 app.get("/", (req, res) => {
   res.status(200).json({
