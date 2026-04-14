@@ -12,6 +12,7 @@ stages:
     displayName: Build Job
     steps:
     - checkout: self
+      fetchDepth: 0
 
     - task: UseNode@1
       inputs:
@@ -24,27 +25,16 @@ stages:
     - script: npm run build
       displayName: Build Application
 
-- stage: Test
-  displayName: Test Stage
-  jobs:
-  - job: TestJob
-    displayName: Test Job
-    steps:
-    - checkout: self
-
-    - task: UseNode@1
-      inputs:
-        version: '18.x'
-      displayName: Install Node.js
-
-    - script: npm install
-      displayName: Install Dependencies
-
     - script: npm test
-      displayName: Run Tests with Coverage
+      displayName: Run Unit Tests with Coverage
 
     - task: PublishCodeCoverageResults@2
       inputs:
         summaryFileLocation: 'coverage/cobertura-coverage.xml'
         pathToSources: '$(System.DefaultWorkingDirectory)'
       displayName: Publish Code Coverage
+
+    - script: |
+        npm install -g sonarqube-scanner
+        sonar-scanner -Dsonar.token=$(SONAR_TOKEN)
+      displayName: Run SonarQube Analysis
