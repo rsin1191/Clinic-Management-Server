@@ -43,5 +43,5 @@ stages:
     - script: npm ci
       displayName: Install Dependencies
 
-    - script: npm test -- --coverage
+    - script: npm test
       displayName: Run Tests with Coverage

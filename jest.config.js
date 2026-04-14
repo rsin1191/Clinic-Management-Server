@@ -1,8 +1,6 @@
-module.exports = {
+export default {
   testEnvironment: "node",
-
   collectCoverage: true,
-
   collectCoverageFrom: [
     "controllers/**/*.js",
     "middlewares/**/*.js",
@@ -10,8 +8,6 @@ module.exports = {
     "routes/**/*.js",
     "utils/**/*.js",
   ],
-
   coverageDirectory: "coverage",
-
   coveragePathIgnorePatterns: ["/node_modules/", "/tests/"],
 };
