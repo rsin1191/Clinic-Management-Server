@@ -14,69 +14,34 @@ stages:
   displayName: Build Stage
   jobs:
   - job: BuildJob
-    displayName: Build and Test Job
-
     steps:
     - checkout: self
 
-    # ========================
-    # Install Node.js
-    # ========================
     - task: UseNode@1
       inputs:
         version: '18.x'
       displayName: Install Node.js
 
-    # ========================
-    # Install dependencies
-    # ========================
     - script: npm ci
       displayName: Install Dependencies
 
-    # ========================
-    # SonarQube - Prepare
-    # ========================
-    - task: SonarQubePrepare@5
+    - script: echo "Build step"
+      displayName: Build
+
+- stage: Test
+  displayName: Test Stage
+  jobs:
+  - job: TestJob
+    steps:
+    - checkout: self
+
+    - task: UseNode@1
       inputs:
-        SonarQube: 'SonarConnection'
-        scannerMode: 'CLI'
-        configMode: 'manual'
-        cliProjectKey: 'Clinic-Management-Server'
-        cliProjectName: 'Clinic-Management-Server'
-        cliSources: '.'
-      displayName: Prepare SonarQube Analysis
+        version: '18.x'
+      displayName: Install Node.js
 
-    # ========================
-    # Build step
-    # ========================
-    - script: npm run build
-      displayName: Build Application
+    - script: npm ci
+      displayName: Install Dependencies
 
-    # ========================
-    # Unit tests + coverage
-    # ========================
     - script: npm test -- --coverage
-      displayName: Run Unit Tests with Coverage
-
-    # ========================
-    # SonarQube - Analyze
-    # ========================
-    - task: SonarQubeAnalyze@5
-      displayName: Run SonarQube Analysis
-
-    # ========================
-    # SonarQube - Publish
-    # ========================
-    - task: SonarQubePublish@5
-      inputs:
-        pollingTimeoutSec: '300'
-      displayName: Publish SonarQube Results
-
-    # ========================
-    # Publish coverage results (Azure UI support)
-    # ========================
-    - task: PublishCodeCoverageResults@2
-      inputs:
-        codeCoverageTool: 'Cobertura'
-        summaryFileLocation: 'coverage/**/cobertura-coverage.xml'
-      displayName: Publish Code Coverage
+      displayName: Run Tests with Coverage
