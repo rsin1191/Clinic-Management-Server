@@ -10,9 +10,9 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: Build
+- stage: BuildAndTest
   jobs:
-  - job: BuildJob
+  - job: BuildTestJob
     steps:
     - checkout: self
 
@@ -21,14 +21,8 @@ stages:
         version: '18.x'
       displayName: 'Install Node.js'
 
-    - script: npm install
-      displayName: 'Build using npm (install dependencies)'
-
-- stage: Test
-  jobs:
-  - job: TestJob
-    steps:
-    - checkout: self
+    - script: npm ci
+      displayName: 'Install dependencies'
 
     - script: npm test
       displayName: 'Run Unit Tests'
