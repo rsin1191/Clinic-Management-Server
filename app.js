@@ -16,6 +16,8 @@ import auth from './middlewares/auth.middleware.js'
 import doctorProfileRoutes from './routes/doctorProfile.routes.js'
 import testimonialRoutes from './routes/testimonial.routes.js';
 
+import Appointment from './models/Appointment.js';
+import appointmentRoutes from "./routes/appointmentRoutes.js";
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -40,10 +42,12 @@ app.get('/api/doctors', listDoctors)
 
 app.use('/api/doctors', doctorProfileRoutes)
 app.use('/api/testimonials', testimonialRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 const start = async () => {
   try {
     await connectDB(mongoURI)
+    await Appointment.syncIndexes();
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     )
