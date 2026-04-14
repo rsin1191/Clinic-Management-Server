@@ -1,0 +1,40 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:
+    - checkout: self
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - script: npm install
+      displayName: 'Install Dependencies'
+
+    - script: echo "Build step (no build needed for Node API)"
+      displayName: 'Build Project'
+
+- stage: Test
+  jobs:
+  - job: TestJob
+    steps:
+    - checkout: self
+
+    - script: echo "No tests yet, but test stage executed"
+      displayName: 'Run Tests'
+
+    - script: echo "Code coverage placeholder"
+      displayName: 'Generate Code Coverage'
