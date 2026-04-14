@@ -28,6 +28,15 @@ const mongoURI = process.env.MONGO_URI;
 
 app.use(helmet());
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true, // MUST be true if you send cookies
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
